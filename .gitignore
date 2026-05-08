@@ -1,0 +1,44 @@
+# Visual Studio files
+.vs/
+*.VC.db
+*.VC.opendb
+*.sln
+.vsconfig
+
+# Unreal generated folders
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+Build/
+
+# IDE folders
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+
+# Large template/sample assets
+Content/ParagonWraith/
+Content/Characters/
+Content/LevelPrototyping/
+
+# Unused template variants
+Content/Variant_Combat/
+Content/Variant_Platforming/
+Content/Variant_SideScrolling/
+
+# World Partition generated data for template variants
+Content/__ExternalActors__/Variant_Combat/
+Content/__ExternalActors__/Variant_Platforming/
+Content/__ExternalActors__/Variant_SideScrolling/
+
+Content/__ExternalObjects__/Variant_Combat/
+Content/__ExternalObjects__/Variant_Platforming/
+Content/__ExternalObjects__/Variant_SideScrolling/
+
+# Variant source code
+Source/Shooter/Variant_Combat/
+Source/Shooter/Variant_Platforming/
+Source/Shooter/Variant_SideScrolling/
