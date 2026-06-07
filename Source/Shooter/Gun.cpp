@@ -1,7 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright (c) 2026 Shaurya Goyal. All Rights Reserved.
 
 
 #include "Gun.h"
+
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AGun::AGun()
@@ -15,6 +17,8 @@ AGun::AGun()
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(SceneRoot);
 
+	MuzzleFlashParticleSystem = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Muzzle Flash"));
+	MuzzleFlashParticleSystem->SetupAttachment(Mesh);
 }
 
 // Called when the game starts or when spawned
@@ -22,6 +26,7 @@ void AGun::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	MuzzleFlashParticleSystem->Deactivate();
 }
 
 // Called every frame
@@ -33,6 +38,8 @@ void AGun::Tick(float DeltaTime)
 
 void AGun::PullTrigger()
 {
+	MuzzleFlashParticleSystem->Activate(true);
+
 	if (OwnerController)
 	{
 		FVector ViewPointLocation;
@@ -50,7 +57,12 @@ void AGun::PullTrigger()
 
 		if(isHit)
 		{
-			DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 5.0f, 16, FColor::Red, true);
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ImpactParticleSystem, HitResult.ImpactPoint, HitResult.ImpactPoint.Rotation());
+			AActor* HitActor = HitResult.GetActor();
+			if (HitActor)
+			{
+				UGameplayStatics::ApplyDamage(HitActor, BulletDamage, OwnerController, this, UDamageType::StaticClass());
+			}
 		}
 	}
 }

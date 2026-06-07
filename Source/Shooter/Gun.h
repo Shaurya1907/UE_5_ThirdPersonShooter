@@ -1,9 +1,13 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright (c) 2026 Shaurya Goyal. All Rights Reserved.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+
 #include "Gun.generated.h"
 
 UCLASS()
@@ -29,8 +33,17 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	USkeletalMeshComponent* Mesh;
 
+	UPROPERTY(VisibleAnywhere)
+	UNiagaraComponent* MuzzleFlashParticleSystem;
+
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* ImpactParticleSystem;
+
 	UPROPERTY(EditAnywhere)
 	float MaxRange = 10000.f;
+
+	UPROPERTY(EditAnywhere)
+	float BulletDamage = 10.f;
 
 	AController* OwnerController;
 
