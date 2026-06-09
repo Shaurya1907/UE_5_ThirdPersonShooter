@@ -18,6 +18,9 @@ public:
 	
 	/** Constructor */
 	AShooterGameMode();
+
+protected:
+	virtual void BeginPlay() override;
 };
 
 
