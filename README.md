@@ -154,7 +154,7 @@ Initializes enemy AI and starts Behavior Trees at game startup.
 
 ### Weapon
 
-![Weapon & Combat](Images/gameplay.png)
+![Weapon & Combat](Images/WeaponCombat.png)
 
 #### `AGun` — `Gun.h / .cpp`
 
