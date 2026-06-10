@@ -152,7 +152,7 @@ Initializes enemy AI and starts Behavior Trees at game startup.
 
 ---
 
-### Weapon
+### Weapon & Combat
 
 ![Weapon & Combat](Images/WeaponCombat.png)
 
