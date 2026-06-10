@@ -12,6 +12,8 @@
 #include "InputActionValue.h"
 #include "Shooter.h"
 
+#include "ShooterPlayerController.h"
+
 AShooterCharacter::AShooterCharacter()
 {
 	// Set size for collision capsule
@@ -57,6 +59,8 @@ void AShooterCharacter::BeginPlay()
 
 	OnTakeAnyDamage.AddDynamic(this, &AShooterCharacter::OnDamageTaken);
 	Health = MaxHealth;
+
+	UpdateHUD();
 
 
 	GetMesh()->HideBoneByName("weapon_r", EPhysBodyOp::PBO_None);
@@ -166,6 +170,20 @@ void AShooterCharacter::Shoot()
 	}
 }
 
+void AShooterCharacter::UpdateHUD()
+{
+	AShooterPlayerController* PlayerController = Cast<AShooterPlayerController>(GetController());
+	if (PlayerController)
+	{
+		float NewPercent = Health / MaxHealth;
+		if (NewPercent < 0.0f)
+		{
+			NewPercent = 0.0f;
+		}
+		PlayerController->HUDWidget->SetHealthBarPercent(NewPercent);
+	}
+}
+
 void AShooterCharacter::OnDamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
 	if (IsAlive) {
@@ -173,14 +191,19 @@ void AShooterCharacter::OnDamageTaken(AActor* DamagedActor, float Damage, const 
 		UE_LOG(LogTemp, Display, TEXT("Damage taken: %f"), Damage);
 
 		Health = Health - Damage;
+		UpdateHUD();
 		if(Health <= 0)
 		{
 			IsAlive = false;
 			Health = 0.0f;
 			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+			DetachFromControllerPendingDestroy();
+
 			UE_LOG(LogTemp, Display, TEXT("Character died: %s"), *GetActorNameOrLabel());
 		}
+
+		
 	}
 	
 }

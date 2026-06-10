@@ -42,3 +42,6 @@ Content/__ExternalObjects__/Variant_SideScrolling/
 Source/Shooter/Variant_Combat/
 Source/Shooter/Variant_Platforming/
 Source/Shooter/Variant_SideScrolling/
+
+# Custom asset pack
+Content/StarterBundle/
