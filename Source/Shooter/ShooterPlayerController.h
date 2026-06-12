@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 
 #include "HUDWidget.h"
+#include "MainMenuWidget.h"
 
 #include "ShooterPlayerController.generated.h"
 
@@ -50,5 +51,17 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	UHUDWidget* HUDWidget;
+
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UMainMenuWidget> MainMenuWidgetClass;
+
+	UPROPERTY()
+	UMainMenuWidget* MainMenuWidget;
+
+	UFUNCTION(BlueprintCallable)
+	void ShowPauseMenu();
+
+	UFUNCTION(BlueprintCallable)
+	void HidePauseMenu();
 
 };

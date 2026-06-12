@@ -37,6 +37,20 @@ void AShooterPlayerController::BeginPlay()
 	{
 		HUDWidget->AddToViewport();
 	}
+
+	MainMenuWidget = CreateWidget<UMainMenuWidget>(this, MainMenuWidgetClass);
+	if (MainMenuWidget)
+	{
+		MainMenuWidget->bRestartLevel = false;
+
+		MainMenuWidget->AddToViewport();
+
+		MainMenuWidget->SetResumeVisibility(false);
+		MainMenuWidget->SetStartGameVisibility(true);
+
+		SetShowMouseCursor(true);
+		SetInputMode(FInputModeUIOnly());
+	}
 }
 
 void AShooterPlayerController::SetupInputComponent()
@@ -64,4 +78,33 @@ void AShooterPlayerController::SetupInputComponent()
 			}
 		}
 	}
+}
+
+void AShooterPlayerController::ShowPauseMenu()
+{
+	if (!MainMenuWidget)
+	{
+		return;
+	}
+
+	MainMenuWidget->AddToViewport();
+	MainMenuWidget->SetResumeVisibility(true);
+
+	MainMenuWidget->SetStartGameVisibility(false);
+
+	SetShowMouseCursor(true);
+	SetInputMode(FInputModeUIOnly());
+}
+
+void AShooterPlayerController::HidePauseMenu()
+{
+	if (!MainMenuWidget)
+	{
+		return;
+	}
+
+	MainMenuWidget->RemoveFromParent();
+
+	SetShowMouseCursor(false);
+	SetInputMode(FInputModeGameOnly());
 }

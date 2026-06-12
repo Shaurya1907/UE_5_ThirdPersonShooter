@@ -12,6 +12,7 @@
 #include "InputActionValue.h"
 #include "Shooter.h"
 
+#include "Kismet/GameplayStatics.h"
 #include "ShooterPlayerController.h"
 
 AShooterCharacter::AShooterCharacter()
@@ -92,6 +93,9 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AShooterCharacter::Look);
 
 		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &AShooterCharacter::Shoot);
+
+		// Pausing
+		EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Started, this, &AShooterCharacter::TogglePause);
 	}
 	else
 	{
@@ -186,24 +190,67 @@ void AShooterCharacter::UpdateHUD()
 
 void AShooterCharacter::OnDamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-	if (IsAlive) {
+	if (!IsAlive)
+	{
+		return;
+	}
 
-		UE_LOG(LogTemp, Display, TEXT("Damage taken: %f"), Damage);
+	UE_LOG(LogTemp, Display, TEXT("Damage taken: %f"), Damage);
 
-		Health = Health - Damage;
-		UpdateHUD();
-		if(Health <= 0)
+	Health -= Damage;
+
+	UpdateHUD();
+
+	if (Health <= 0)
+	{
+		IsAlive = false;
+		Health = 0.0f;
+
+		AShooterPlayerController* PC =
+			Cast<AShooterPlayerController>(GetController());
+
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		if (PC && PC->MainMenuWidget)
 		{
-			IsAlive = false;
-			Health = 0.0f;
-			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			PC->MainMenuWidget->bRestartLevel = true;
 
-			DetachFromControllerPendingDestroy();
+			PC->MainMenuWidget->SetResumeVisibility(false);
+			PC->MainMenuWidget->SetStartGameVisibility(true);
 
-			UE_LOG(LogTemp, Display, TEXT("Character died: %s"), *GetActorNameOrLabel());
+			PC->MainMenuWidget->AddToViewport();
+
+			PC->SetShowMouseCursor(true);
+			PC->SetInputMode(FInputModeUIOnly());
 		}
 
-		
+		DetachFromControllerPendingDestroy();
+
+		UE_LOG(LogTemp, Display, TEXT("Character died: %s"), *GetActorNameOrLabel());
 	}
-	
+}
+
+void AShooterCharacter::TogglePause()
+{
+	AShooterPlayerController* PC = Cast<AShooterPlayerController>(GetController());
+
+	if (!PC)
+	{
+		return;
+	}
+
+	const bool bPaused = UGameplayStatics::IsGamePaused(GetWorld());
+
+	if (!bPaused)
+	{
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
+
+		PC->ShowPauseMenu();
+	}
+	else
+	{
+		UGameplayStatics::SetGamePaused(GetWorld(), false);
+
+		PC->HidePauseMenu();
+	}
 }

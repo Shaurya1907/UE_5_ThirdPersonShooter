@@ -55,6 +55,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* ShootAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* PauseAction;
+
 public:
 
 	/** Constructor */
@@ -117,6 +120,7 @@ public:
 	AGun* Gun;
 
 	void UpdateHUD();
+	void TogglePause();
 
 	UFUNCTION()
 	void OnDamageTaken(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
