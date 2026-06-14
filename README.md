@@ -233,6 +233,37 @@ Contains:
 
 ---
 
+## Main Menu & Game Flow
+
+![Main Menu](Images/main-menu.png)
+
+The game includes a UMG-based menu system that manages the complete gameplay flow from startup to game over.
+
+### Startup Menu
+
+When the game launches, the player is presented with:
+
+* **Start New Game** — Starts a new gameplay session.
+* **Quit Game** — Exits the application.
+
+### Pause Menu
+
+During gameplay, pressing **Escape** pauses the game and displays:
+
+* **Resume Game** — Returns to gameplay.
+* **Quit Game** — Exits the application.
+
+### Game Over Flow
+
+When the player's health reaches zero, the menu is shown again with:
+
+* **Start New Game** — Restarts the level and begins a new session.
+* **Quit Game** — Exits the application.
+
+The menu system provides a complete gameplay loop, allowing players to start, pause, resume, restart, and quit the game through an intuitive user interface.
+
+---
+
 ## Requirements
 
 | Requirement       | Version |
